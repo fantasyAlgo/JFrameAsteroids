@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements Runnable{
 
   Thread gameThread;
   KeyHandler keyHandler = new KeyHandler();
-  PlayerHandler playerH = new PlayerHandler(1, 50);
+  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.4f, 50);
 
   public GamePanel(){
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));

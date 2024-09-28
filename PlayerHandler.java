@@ -14,20 +14,37 @@ public class PlayerHandler {
   int pos_x = 0;
   int pos_y = 0;
   float angle = 0.0f;
+
+  float acc_x = 0;
+  float acc_y = 0;
+
   float current_angle = 0.0f;
 
-  int speed;
+  float speed;
   int size;
 
-  public PlayerHandler(int speed, int size){
+  int windowWidth;
+  int windowHeight;
+
+  BallotsHandler ballotsHandler;
+
+  public PlayerHandler(int windowWidth, int windowHeight, float speed, int size){
     this.speed = speed;
     this.size = size;
+    this.windowHeight = windowHeight;
+    this.windowWidth = windowWidth;
+
     this.Move(50, 50);
     this.applyRotation();
+
+    ballotsHandler = new BallotsHandler(10, this);
   }
   public void Draw(Graphics2D g2d){
     g2d.drawPolygon(verticesX, verticesY, NVertices);
   }
+  public  void DrawBullets(Graphics2D g2d){
+
+ }
   public void Move(int pos_x, int pos_y){
     this.pos_x += pos_x;
     this.pos_y += pos_x;
@@ -37,8 +54,7 @@ public class PlayerHandler {
     }
   }
   public void Transform(int mov_x, int mov_y, float angle){
-    float rot = angle - this.current_angle;
-    if (rot == 0) return;
+    //if (rot == 0) return;
     this.current_angle = angle;
     double centerX = this.baseVerticesX[1];
     double centerY = this.baseVerticesY[1];
@@ -63,15 +79,24 @@ public class PlayerHandler {
     this.Transform(0, 0, this.angle);
   }
   public void React(boolean leftPressed, boolean rightPressed, boolean upPressed, boolean spacePressed){
-    int mov_x = 0;
-    int mov_y = 0;
-    if (rightPressed) this.angle += 0.01f;
-    if (leftPressed) this.angle -= 0.01f;
+    if (rightPressed) this.angle += 0.02f;
+    if (leftPressed) this.angle -= 0.02f;
     if (upPressed){
-      mov_x = (int) (10.0*Math.cos(this.angle));
-      mov_y = (int) (10.0*Math.sin(this.angle));
+      acc_x += this.speed*Math.sin(this.angle);
+      acc_y += -(this.speed*Math.cos(this.angle));
     }
-    Transform(mov_x, mov_y, this.angle);
+    acc_x *= 0.95;
+    acc_y *= 0.95;
+    if (this.pos_x + acc_x > this.windowWidth) this.pos_x = 0;
+    if (this.pos_x + acc_x < 0) this.pos_x = this.windowWidth;
+    if (this.pos_y + acc_y > this.windowHeight) this.pos_y = 0;
+    if (this.pos_y + acc_y < 0) this.pos_y = this.windowHeight;
+
+    if (spacePressed){
+      ballotsHandler.add_bullet(x, y, Math.cos(angle), Math.sin(angle));
+    }
+
+    Transform((int) acc_x, (int) acc_y, this.angle);
   }
 
 
