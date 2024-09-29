@@ -4,21 +4,15 @@ import java.awt.Graphics2D;
  * PlayerHandler
  */
 public class PlayerHandler {
-  final int[] baseVerticesX = {10, 20, 30};
-  final int[] baseVerticesY = {50, 25, 50};
-  final int NVertices = 3;
-  int[] verticesX = {baseVerticesX[0], baseVerticesX[1], baseVerticesX[2]};
-  int[] verticesY = {baseVerticesY[0], baseVerticesY[1], baseVerticesY[2]};
-  double[] verticesXD = new double[3];
-  double[] verticesYD = new double[3];
+  Shape shape = new Shape(20, 25, new float[]{10, 20, 30}, new float[]{50, 25, 50});
+
   int pos_x = 0;
   int pos_y = 0;
   float angle = 0.0f;
+  float current_angle = 0.0f;
 
   float acc_x = 0;
   float acc_y = 0;
-
-  float current_angle = 0.0f;
 
   float speed;
   int size;
@@ -27,6 +21,8 @@ public class PlayerHandler {
   int windowHeight;
 
   BallotsHandler ballotsHandler;
+
+  boolean isSpacePressed = false;
 
   public PlayerHandler(int windowWidth, int windowHeight, float speed, int size){
     this.speed = speed;
@@ -37,46 +33,25 @@ public class PlayerHandler {
     this.Move(50, 50);
     this.applyRotation();
 
-    ballotsHandler = new BallotsHandler(10, this);
+    ballotsHandler = new BallotsHandler(1000, this.windowWidth, this.windowHeight);
   }
-  public void Draw(Graphics2D g2d){
-    g2d.drawPolygon(verticesX, verticesY, NVertices);
+  public void Draw(Graphics2D g2d){ 
+    shape.Draw(g2d, this.pos_x, this.pos_y, this.current_angle);
   }
   public  void DrawBullets(Graphics2D g2d){
-
- }
+    ballotsHandler.Draw(g2d);
+  }
   public void Move(int pos_x, int pos_y){
     this.pos_x += pos_x;
     this.pos_y += pos_x;
-    for (int i = 0; i < NVertices; i++) {
-      verticesX[i] += pos_x;
-      verticesY[i] += pos_y;
-    }
-  }
-  public void Transform(int mov_x, int mov_y, float angle){
-    //if (rot == 0) return;
-    this.current_angle = angle;
-    double centerX = this.baseVerticesX[1];
-    double centerY = this.baseVerticesY[1];
-    double x, y;
-    double cos = Math.cos(this.current_angle);
-    double sin = Math.sin(this.current_angle);
-    //System.out.println(this.current_angle + " | " +  Math.floor(cos * 100) / 100 + " | " +  Math.floor(sin* 100) / 100 + " | " +  this.baseVerticesY[0]);
-    for (int i = 0; i < NVertices; i++){
-      x = centerX - this.baseVerticesX[i];
-      y = centerY - this.baseVerticesY[i];
-      this.verticesX[i] = (int) (-(x*cos - y*sin) + centerX);
-      this.verticesY[i] = (int) (-(x*sin + y*cos) + centerY);
-    }
-    this.pos_x += mov_x;
-    this.pos_y += mov_y;
-    for (int i = 0; i < NVertices; i++) {
-      this.verticesX[i] += this.pos_x;
-      this.verticesY[i] += this.pos_y;
-    }
   }
   public void applyRotation(){
-    this.Transform(0, 0, this.angle);
+    this.current_angle = angle;
+  }
+  public void Transform(int acc_x, int acc_y, float angle){
+    this.pos_x += acc_x;
+    this.pos_y += acc_y;
+    applyRotation();
   }
   public void React(boolean leftPressed, boolean rightPressed, boolean upPressed, boolean spacePressed){
     if (rightPressed) this.angle += 0.02f;
@@ -92,11 +67,11 @@ public class PlayerHandler {
     if (this.pos_y + acc_y > this.windowHeight) this.pos_y = 0;
     if (this.pos_y + acc_y < 0) this.pos_y = this.windowHeight;
 
-    if (spacePressed){
-      ballotsHandler.add_bullet(x, y, Math.cos(angle), Math.sin(angle));
-    }
-
     Transform((int) acc_x, (int) acc_y, this.angle);
+    if (spacePressed && !isSpacePressed){
+      ballotsHandler.add_bullet((int) this.shape.centerX + this.pos_x, (int) this.shape.centerY + this.pos_y, this.current_angle);
+      isSpacePressed = true;
+    } else if (!spacePressed) isSpacePressed = false;
   }
 
 
@@ -112,5 +87,4 @@ public class PlayerHandler {
   public int getPos_y() {
     return pos_y;
   }
-
 }

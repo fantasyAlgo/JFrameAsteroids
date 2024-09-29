@@ -20,11 +20,14 @@ public class GamePanel extends JPanel implements Runnable{
   final int screenWidth = tileSize*maxScreenCol;
   final int screenHeight = tileSize*maxScreenRow;
 
+  int time = 0;
   int FPS = 144;
 
   Thread gameThread;
   KeyHandler keyHandler = new KeyHandler();
-  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.4f, 50);
+
+  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.4f, 10);
+  AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
 
   public GamePanel(){
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -48,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     while (gameThread != null) {
       currentTime = System.nanoTime();
+      time++;
 
       delta += (currentTime - lastTime) / drawInterval;
       timer += (currentTime - lastTime);
@@ -59,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable{
         drawCount++;
       }
       if ( timer >= 1000000000){
-        System.out.println("FPS: " + drawCount);
+        //System.out.println("FPS: " + drawCount);
         drawCount = 0;
         timer = 0;
       }
@@ -68,6 +72,9 @@ public class GamePanel extends JPanel implements Runnable{
   }
   public void update(){
     playerH.React(keyHandler.leftPressed, keyHandler.rightPressed, keyHandler.upPressed, keyHandler.spacePressed);
+    playerH.ballotsHandler.update();
+    asteroidsHandler.update();
+    if (time%100 == 0) asteroidsHandler.add_asteroid((int)Math.random()*40);
   }
   public void paintComponent(Graphics g){
     super.paintComponent(g);
@@ -77,7 +84,10 @@ public class GamePanel extends JPanel implements Runnable{
     g2.setColor(Color.white);
 
     playerH.Draw(g2);
+    playerH.DrawBullets(g2);
+    asteroidsHandler.Draw(g2);
 
+    
     g2.dispose();
 
   }
