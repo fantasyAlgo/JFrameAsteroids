@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.util.Arrays;
 
 /**
  * Asteroid
@@ -12,8 +13,8 @@ public class Asteroid extends Entity {
   }
   public void make_shape(float size){
     // To do: Make the shape
-    int n_edges = (int) Math.random()*20 + 1;
-    float distorsion = 5;
+    int n_edges = (int) (Math.random()*20 + 1);
+    float distorsion = 5*(size/20.0f);
 
     float[] edgesX = new float[n_edges];
     float[] edgesY = new float[n_edges];
@@ -28,12 +29,16 @@ public class Asteroid extends Entity {
       edgesY[i] += distorsion - Math.random() * distorsion *2;
       i++;
     }
+    System.out.println(Arrays.toString(edgesX));
+    System.out.println(Arrays.toString(edgesY));
+    System.out.println("@@@@@@@@@@@@@ " + n_edges);
     this.shape = new Shape(0, 0, edgesX, edgesY);
     active = true;
   }
   public void Draw(Graphics2D g2d){
-    if (this.shape != null)
+    if (this.shape != null){
       this.shape.Draw(g2d, (int) super.x, (int) super.y, super.angle);
+    }
   }
 
 }

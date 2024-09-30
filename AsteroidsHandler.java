@@ -10,13 +10,18 @@ public class AsteroidsHandler {
   int HEIGHT_WINDOW;
 
   public AsteroidsHandler(int WIDTH, int HEIGHT){
+    this.WIDTH_WINDOW = WIDTH;
+    this.HEIGHT_WINDOW = HEIGHT;
     for (int i = 0; i < MAX_ASTEROIDS; i++) 
       asteroids[i] = new Asteroid(0,0);
   }
 
-  public boolean add_asteroid(float size){ for (int i = 0; i < MAX_ASTEROIDS; i++) {
+  public boolean add_asteroid(float size){
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
       if (!asteroids[i].active){
-        asteroids[i].make_shape((float)Math.random()*50.0f);
+        asteroids[i].make_shape(size);
+        asteroids[i].setCoord((float)(Math.random()*this.WIDTH_WINDOW), 0);
+        asteroids[i].setDirection(0, (float)(1 - Math.random()*2), (float)Math.random()*2.0f);
         asteroids[i].active = true;
         return true;
       }
@@ -25,21 +30,21 @@ public class AsteroidsHandler {
   }
   public void splitAsteroid(int index){}
   public void update(){
+    //boolean addAsteroid = Math.random() > 0.1f;
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-      if (!asteroids[i].active){
+      if (asteroids[i].active){
         asteroids[i].update();
       }
     }
+    //if (addAsteroid) this.add_asteroid(Math.random())
   }
 
   public void Draw(Graphics2D g2d){
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-      if (!asteroids[i].active){
+      if (asteroids[i].active){
         asteroids[i].Draw(g2d);
       }
     }
   }
-
-
 
 }

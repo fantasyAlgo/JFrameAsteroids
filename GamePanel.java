@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable{
     long currentTime;
     long timer = 0;
     int drawCount = 0;
+    time++;
 
     while (gameThread != null) {
       currentTime = System.nanoTime();
@@ -74,7 +75,10 @@ public class GamePanel extends JPanel implements Runnable{
     playerH.React(keyHandler.leftPressed, keyHandler.rightPressed, keyHandler.upPressed, keyHandler.spacePressed);
     playerH.ballotsHandler.update();
     asteroidsHandler.update();
-    if (time%100 == 0) asteroidsHandler.add_asteroid((int)Math.random()*40);
+    if (Math.random() < 0.005){
+      time++;
+      asteroidsHandler.add_asteroid(Math.max((float)Math.random()*40, 20.0f));
+    }
   }
   public void paintComponent(Graphics g){
     super.paintComponent(g);
