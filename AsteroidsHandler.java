@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
  * AsteroidsHandler
  */
 public class AsteroidsHandler {
-  final int MAX_ASTEROIDS = 20;
+  final int MAX_ASTEROIDS = 5;
   Asteroid[] asteroids = new Asteroid[MAX_ASTEROIDS];
   int WIDTH_WINDOW;
   int HEIGHT_WINDOW;
@@ -32,6 +32,7 @@ public class AsteroidsHandler {
   public void update(){
     //boolean addAsteroid = Math.random() > 0.1f;
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
+      asteroids[i].active = Helpers.isInside(WIDTH_WINDOW, HEIGHT_WINDOW, (int) asteroids[i].x, (int) asteroids[i].y) || asteroids[i].hasEndedSpawn();
       if (asteroids[i].active){
         asteroids[i].update();
       }

@@ -4,7 +4,11 @@ import java.awt.Graphics2D;
  * PlayerHandler
  */
 public class PlayerHandler {
-  Shape shape = new Shape(20, 25, new float[]{10, 20, 30}, new float[]{50, 25, 50});
+  Shape shape = new Shape(20, 25, new Point[]{
+    new Point(10, 50),
+    new Point(20, 25),
+    new Point(30, 50)
+  });
 
   int pos_x = 0;
   int pos_y = 0;

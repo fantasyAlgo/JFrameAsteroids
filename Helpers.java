@@ -2,7 +2,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.Stack;
 
 
@@ -59,11 +58,10 @@ public class Helpers {
     for (int i = 0; i < size;i++) if (vertices[i].y < lowest.y) lowest = vertices[i];
     return lowest;
   }
-  public boolean[] convexhull(Point[] vertices ){
+  public static Point[] convexhull(Point[] vertices ){
     Stack<Point> stack = new Stack<>();
 
     int size = vertices.length;
-    boolean[] convexPoints = new boolean[size];
     Point[] verticesSorted = Arrays.copyOf(vertices, size);
     Point minPoint = getMinY(vertices);
     Arrays.sort(verticesSorted, (p1, p2) -> compareByAngle(minPoint, p1, p2));
@@ -76,13 +74,10 @@ public class Helpers {
 			while (stack.peek() != null && ccw(stack.peek(), p, next) <= 0) { 
 				p = stack.pop(); // delete points that create clockwise turn
 			}
-						
 			stack.push(p);
 			stack.push(verticesSorted[i]);
     }
-    return convexPoints;
+    return stack.toArray(new Point[stack.size()]);
   }
-  public boolean intersect(Shape shape1, Shape shape2){
-    return false;
-  }
+
 }

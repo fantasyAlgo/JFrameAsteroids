@@ -13,8 +13,13 @@ public class BallotsHandler {
   int HEIGHT_WINDOW;
 
   int active_bullots = 0;
-  Shape ballotShape = new Shape(BALLOT_SIZE/2, BALLOT_SIZE/4, new float[]{0, BALLOT_SIZE, BALLOT_SIZE, 0}, 
-        new float[]{0, 0, BALLOT_SIZE*1.5f, BALLOT_SIZE*1.5f});                                                          
+  Point[] rectangle_vertices = new Point[]{
+    new Point(0 , 0),
+    new Point(BALLOT_SIZE, 0),
+    new Point(BALLOT_SIZE, BALLOT_SIZE*1.5f),
+    new Point(0, BALLOT_SIZE*1.5f)
+  };
+  Shape ballotShape = new Shape(BALLOT_SIZE/2, BALLOT_SIZE/4, rectangle_vertices);
 
   public BallotsHandler(int n_ballots, int WIDTH, int HEIGHT){
     this.WIDTH_WINDOW = WIDTH;

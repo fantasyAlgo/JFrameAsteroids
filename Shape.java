@@ -4,19 +4,17 @@ import java.awt.Graphics2D;
  * Shape
  */
 public class Shape {
-  float[] baseVerticesX;
-  float[] baseVerticesY;
+  Point[] baseVertices;
   int size;
   double centerX;
   double centerY;
   int[] verticesX;
   int[] verticesY;
-  public Shape(int centerX, int centerY, float[] verticesX, float[] verticesY){
-    this.baseVerticesX = verticesX;
-    this.baseVerticesY = verticesY;
+  public Shape(int centerX, int centerY, Point[] vertices){
+    this.baseVertices = vertices;
     this.centerX = centerX;
     this.centerY = centerY;
-    this.size = verticesY.length;
+    this.size = vertices.length;
 
     this.verticesX = new int[this.size];
     this.verticesY = new int[this.size];
@@ -28,8 +26,8 @@ public class Shape {
     double sin = Math.sin(angle);
     
     for (int i = 0; i < size; i++){
-      x = this.centerX - this.baseVerticesX[i];
-      y = this.centerY - this.baseVerticesY[i];
+      x = this.centerX - this.baseVertices[i].x;
+      y = this.centerY - this.baseVertices[i].y;
       this.verticesX[i] = (int) (-(x*cos - y*sin) + this.centerX);
       this.verticesY[i] = (int) (-(x*sin + y*cos) + this.centerY);
     }
