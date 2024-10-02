@@ -19,7 +19,9 @@ public class Shape {
     this.verticesX = new int[this.size];
     this.verticesY = new int[this.size];
   }
-  // Make it!
+  public Point[] getPoints(){
+    return this.baseVertices;
+  }
   public void Draw(Graphics2D g2d, int posX, int posY, float angle){
     double x, y;
     double cos = Math.cos(angle);
