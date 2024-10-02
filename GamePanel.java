@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
   Thread gameThread;
   KeyHandler keyHandler = new KeyHandler();
 
-  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.4f, 10);
+  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.2f, 10);
   AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
 
   public GamePanel(){
@@ -75,10 +75,27 @@ public class GamePanel extends JPanel implements Runnable{
     playerH.React(keyHandler.leftPressed, keyHandler.rightPressed, keyHandler.upPressed, keyHandler.spacePressed);
     playerH.ballotsHandler.update();
     asteroidsHandler.update();
-    if (Math.random() < 0.005){
+    if (Math.random() < 0.005 && asteroidsHandler.active_asteroids() < asteroidsHandler.MAX_ASTEROIDS/2.0){
       time++;
-      asteroidsHandler.add_asteroid(Math.max((float)Math.random()*40, 20.0f));
+      asteroidsHandler.add_asteroid(Math.max((float)Math.random()*60, 30.0f));
     }
+    // Collision detection
+    float collision;
+    for (Asteroid asteroid: asteroidsHandler.asteroids) {
+      if (asteroid.active){
+        collision = CollisionHandler.collisionSAT(asteroid.shape, playerH.shape, asteroid, playerH);
+        if (collision != 10000f) playerH.kill();
+      }
+    }
+    for (Asteroid asteroid: asteroidsHandler.asteroids) {
+      if (asteroid.active && playerH.ballotsHandler.isColliding(asteroid)){
+        if (asteroid.size_shape > 20.0f){
+          System.out.println(asteroidsHandler.splitAsteroid(asteroid));
+        }
+        asteroid.kill();
+      }
+    }
+
   }
   public void paintComponent(Graphics g){
     super.paintComponent(g);

@@ -56,6 +56,17 @@ public class BallotsHandler {
     }
     //System.out.println("#############");
   }
+  public boolean isColliding(Asteroid asteroid){
+    float collider;
+    for (Ballot ballot : ballots) {
+      collider = CollisionHandler.collisionSAT(asteroid.shape, ballotShape, asteroid, ballot);
+      if (collider != 10000.0){
+        ballot.kill();
+        return true;
+      }
+    }
+    return false;
+  }
   public void Draw(Graphics2D g2d){
     for (int i = 0; i < n_ballots; i++) {
       if (this.ballots[i].active)

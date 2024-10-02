@@ -15,6 +15,7 @@ public class Entity {
     this.x = x;
     this.y = y;
   }
+
   public void setDirection(float angle, float dirX, float dirY){
     this.angle = angle;
     this.dirX = dirX;

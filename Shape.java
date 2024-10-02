@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 
+
 /**
  * Shape
  */
@@ -39,4 +40,22 @@ public class Shape {
     }
     g2d.drawPolygon(this.verticesX, this.verticesY, size);
   }
+  public Point[] getTransformedPoints(Entity entity){
+    double x, y;
+    double cos = Math.cos(entity.angle);
+    double sin = Math.sin(entity.angle);
+    Point[] vertices = new Point[this.size];
+    for (int i = 0; i < this.size; i++){
+      x = this.centerX - this.baseVertices[i].x;
+      y = this.centerY - this.baseVertices[i].y;
+      vertices[i] = new Point((float)(-(x*cos - y*sin) + this.centerX), (float)(-(x*sin + y*cos) + this.centerY));
+    }
+    for (int i = 0; i < this.size; i++) {
+      vertices[i].x += entity.x;
+      vertices[i].y += entity.y;
+    }
+    return vertices;
+  }
+
+
 }
