@@ -15,7 +15,7 @@ public class Helpers {
     return !(x <= 0 || y <= 0 || x >= WIDTH || y >= HEIGHT);
   }
 
-  public static int ccw(Point a, Point b, Point c) {
+  private static int ccw(Point a, Point b, Point c) {
 		/*
 		 * determinant (the cross product) calculates the signed area of parallelogram
 		 */
@@ -25,7 +25,7 @@ public class Helpers {
 		return 0; // collinear
 	}
 
-  public static int compareByAngle(Point ref, Point b, Point c){
+  private static int compareByAngle(Point ref, Point b, Point c){
     /*
      * the ref point should always be pushed to the beginning
      */
@@ -52,7 +52,7 @@ public class Helpers {
       return ccw * -1;
     }
   }
-  public static Point getMinY(Point[] vertices){
+  private static Point getMinY(Point[] vertices){
     int size = vertices.length;
     Point lowest = new Point(0, Integer.MAX_VALUE);
     for (int i = 0; i < size;i++) if (vertices[i].y < lowest.y) lowest = vertices[i];

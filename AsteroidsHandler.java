@@ -21,7 +21,7 @@ public class AsteroidsHandler {
       if (!asteroids[i].active){
         asteroids[i].make_shape(size);
         asteroids[i].setCoord(coord.x, coord.y);
-        asteroids[i].setDirection(0, (float)(1 - Math.random()*2), (float)Math.random()*2.0f);
+        asteroids[i].setDirection(0, (float)(1 - Math.random()*2)/2.0f, (float)Math.random());
         asteroids[i].active = true;
         return true;
       }

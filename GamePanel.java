@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
@@ -11,6 +12,7 @@ import javax.swing.JPanel;
  * GamePanel
  */
 public class GamePanel extends JPanel implements Runnable{
+  // You won't win over my mind sun!
   final int originalTileSize = 16;
   final int scale = 3;
 
@@ -22,12 +24,14 @@ public class GamePanel extends JPanel implements Runnable{
 
   int time = 0;
   int FPS = 144;
+  boolean pageSettings = false;
 
   Thread gameThread;
   KeyHandler keyHandler = new KeyHandler();
 
   PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.2f, 10);
   AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
+  ParticleSystem particleSystem = new ParticleSystem();
 
   public GamePanel(){
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -75,6 +79,7 @@ public class GamePanel extends JPanel implements Runnable{
     playerH.React(keyHandler.leftPressed, keyHandler.rightPressed, keyHandler.upPressed, keyHandler.spacePressed);
     playerH.ballotsHandler.update();
     asteroidsHandler.update();
+    particleSystem.update();
     if (Math.random() < 0.005 && asteroidsHandler.active_asteroids() < asteroidsHandler.MAX_ASTEROIDS/2.0){
       time++;
       asteroidsHandler.add_asteroid(Math.max((float)Math.random()*60, 30.0f));
@@ -84,7 +89,10 @@ public class GamePanel extends JPanel implements Runnable{
     for (Asteroid asteroid: asteroidsHandler.asteroids) {
       if (asteroid.active){
         collision = CollisionHandler.collisionSAT(asteroid.shape, playerH.shape, asteroid, playerH);
-        if (collision != 10000f) playerH.kill();
+        if (collision != 10000f){
+          particleSystem.add_boom_particles(playerH, 100f);
+          playerH.kill();
+        }
       }
     }
     for (Asteroid asteroid: asteroidsHandler.asteroids) {
@@ -92,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable{
         if (asteroid.size_shape > 20.0f){
           System.out.println(asteroidsHandler.splitAsteroid(asteroid));
         }
+        particleSystem.add_boom_particles(asteroid, asteroid.size_shape);
         asteroid.kill();
       }
     }
@@ -102,11 +111,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     Graphics2D g2 = (Graphics2D) g;
 
+    g2.setFont(new Font("serif", Font.PLAIN, 32));
     g2.setColor(Color.white);
+
 
     playerH.Draw(g2);
     playerH.DrawBullets(g2);
     asteroidsHandler.Draw(g2);
+    particleSystem.Draw(g2);
 
     
     g2.dispose();

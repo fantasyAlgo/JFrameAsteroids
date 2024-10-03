@@ -19,7 +19,7 @@ public class Asteroid extends Entity {
     // To do: Make the shape
     this.time_spawn = 0;
     this.size_shape = size;
-    int n_edges = Math.max((int) (Math.random()*20 + 1), 3);
+    int n_edges = Math.max((int) (Math.random()*20 + 1), 5);
     double rot_distorsion = Math.random()*2.0;
     float distorsion = 5*(size/20.0f);
 
@@ -39,8 +39,6 @@ public class Asteroid extends Entity {
       i++;
     }
     edges = Helpers.convexhull(edges);
-    //System.out.println(Arrays.toString(edges));
-    //System.out.println("@@@@@@@@@@@@@ " + n_edges);
     this.shape = new Shape(0, 0, edges);
     active = true;
   }

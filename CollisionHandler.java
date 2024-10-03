@@ -5,7 +5,7 @@ import java.util.Arrays;
  */
 public class CollisionHandler {
   // Here Point can be seen as a vector, so yeah Point = Vector and |-----.   | == |     .   |
-  public static Point getProjectionMinMax(Point axis, Point[] points) {
+  private static Point getProjectionMinMax(Point axis, Point[] points) {
     int length = points.length;
     float smallest = 10000.0f;
     float biggest = -10000.0f;
@@ -18,12 +18,12 @@ public class CollisionHandler {
     return new Point(smallest, biggest);
   }
 
-  public static Point getNormal(Point p1, Point p2) {
+  private static Point getNormal(Point p1, Point p2) {
     Point diff = new Point(p2.x - p1.x, p2.y - p1.y);
     diff.normalize();
     return new Point(diff.y, -diff.x);
   }
-  public static Point[] getAxis(Point[] vertices){
+  private static Point[] getAxis(Point[] vertices){
     int length = vertices.length;
     Point[] axis = new Point[length];
     for (int i = 0; i < length;i++) {
@@ -31,7 +31,7 @@ public class CollisionHandler {
     }
     return axis;
   }
-  public static float howMuchOverlap(Point p1, Point p2){
+  private static float howMuchOverlap(Point p1, Point p2){
       if (p1.x <= p2.x && p2.x <= p1.y && p1.x <= p2.y && p2.y <= p1.y)
         return Math.abs(p2.y - p2.x);
       else if (p1.x <= p2.x && p2.x <= p1.y)
@@ -42,6 +42,7 @@ public class CollisionHandler {
         return Math.abs(p1.y - p1.x);
       else return -1;
   }
+
   // Implementing the SAT algorithm
   // Here i'm using Entity classes to identify the position and rotation of the objects
   public static float collisionSAT(Shape shape1, Shape shape2, Entity entity1, Entity entity2){

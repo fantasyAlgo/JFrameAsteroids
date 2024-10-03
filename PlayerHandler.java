@@ -35,10 +35,17 @@ public class PlayerHandler extends Entity {
 
     this.angle = 0;
 
-    ballotsHandler = new BallotsHandler(1000, this.windowWidth, this.windowHeight);
+    ballotsHandler = new BallotsHandler(4, this.windowWidth, this.windowHeight);
   }
-  public void kill(){this.isAlive = false;}
+  public void kill(){
+    this.setCoord(10000, 10000);
+    this.isAlive = false;
+  }
   public void Draw(Graphics2D g2d){ 
+    if (!this.isAlive){
+      g2d.drawString("You loser", this.windowWidth/2-44, 32);
+      return;
+    }
     shape.Draw(g2d, (int)this.x, (int)this.y, this.angle);
   }
   public  void DrawBullets(Graphics2D g2d){

@@ -40,6 +40,7 @@ public class BallotsHandler {
       if (!ballots[i].active){
         ballots[i].setCoord(x, y);
         ballots[i].setDirection(angle, BALLOT_SPEED*dirY, BALLOT_SPEED*dirX);
+        ballots[i].setPlayerPos(new Point(x, y));
         ballots[i].active = true;
         return true;
       }
@@ -51,6 +52,7 @@ public class BallotsHandler {
       ballots[i].active = Helpers.isInside(WIDTH_WINDOW, HEIGHT_WINDOW, (int) ballots[i].x, (int) ballots[i].y);
       //System.out.println(ballots[i].active + " | " + ballots[i].x + " | " + ballots[i].y + " | " + ballots[i].dirX + " " +  ballots[i].dirY);
       if (ballots[i].active){
+        ballots[i].checkPlayerPos();
         ballots[i].update();
       }else ballots[i].setCoord(100000, 100000);
     }
