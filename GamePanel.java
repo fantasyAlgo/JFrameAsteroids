@@ -32,6 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
   PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.2f, 10);
   AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
   ParticleSystem particleSystem = new ParticleSystem();
+  GUI gui = new GUI(screenWidth, screenHeight);
 
   public GamePanel(){
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -100,6 +101,7 @@ public class GamePanel extends JPanel implements Runnable{
         if (asteroid.size_shape > 20.0f){
           System.out.println(asteroidsHandler.splitAsteroid(asteroid));
         }
+        gui.addPoints(asteroid.size_shape);
         particleSystem.add_boom_particles(asteroid, asteroid.size_shape);
         asteroid.kill();
       }
@@ -119,6 +121,7 @@ public class GamePanel extends JPanel implements Runnable{
     playerH.DrawBullets(g2);
     asteroidsHandler.Draw(g2);
     particleSystem.Draw(g2);
+    gui.Draw(g2, playerH.isAlive);
 
     
     g2.dispose();

@@ -42,10 +42,7 @@ public class PlayerHandler extends Entity {
     this.isAlive = false;
   }
   public void Draw(Graphics2D g2d){ 
-    if (!this.isAlive){
-      g2d.drawString("You loser", this.windowWidth/2-44, 32);
-      return;
-    }
+    if (!this.isAlive) return;
     shape.Draw(g2d, (int)this.x, (int)this.y, this.angle);
   }
   public  void DrawBullets(Graphics2D g2d){
