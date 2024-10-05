@@ -25,7 +25,6 @@ public class Asteroid extends Entity {
 
     Point[] edges = new Point[n_edges];
 
-
     double step = (Math.PI*2.0f/((double) n_edges));
     int i = 0;
     for (double angle = rot_distorsion; angle < (Math.PI*2.0 + rot_distorsion); angle+=step) {

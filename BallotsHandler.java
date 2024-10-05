@@ -75,5 +75,9 @@ public class BallotsHandler {
         this.ballotShape.Draw(g2d, (int) ballots[i].x, (int) ballots[i].y, (float) Math.PI + ballots[i].angle); 
     }
   }
-
+  public void reset(){
+    for (int i = 0; i < n_ballots; i++) {
+      this.ballots[i].active = false;
+    }
+  }
 }

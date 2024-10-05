@@ -45,6 +45,7 @@ public class ParticleSystem {
   public void Draw(Graphics2D g2d){
     int magn;
     for (Entity entity : particles) {
+      if (entity == null) continue;
       magn = (int)(Math.sqrt(PARTICLE_SIZE*entity.dirX*entity.dirX + PARTICLE_SIZE*entity.dirY*entity.dirY)*2.0f);
       g2d.drawRect((int)entity.x, (int)entity.y, magn, magn);
     }

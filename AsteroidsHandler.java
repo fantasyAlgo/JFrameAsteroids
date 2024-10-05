@@ -4,8 +4,10 @@ import java.awt.Graphics2D;
  * AsteroidsHandler
  */
 public class AsteroidsHandler {
-  final int MAX_ASTEROIDS = 10;
-  Asteroid[] asteroids = new Asteroid[MAX_ASTEROIDS];
+  int MAX_ASTEROIDS = 10;
+  float max_asteroid_cont = 10;
+  float speedAsteroids = 1.0f;
+  Asteroid[] asteroids = new Asteroid[100];
   int WIDTH_WINDOW;
   int HEIGHT_WINDOW;
 
@@ -16,24 +18,39 @@ public class AsteroidsHandler {
       asteroids[i] = new Asteroid(0,0);
   }
 
-  public boolean add_asteroid(float size, Point coord){
+  public boolean add_asteroid(float size, Point coord, Point dir){
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
       if (!asteroids[i].active){
         asteroids[i].make_shape(size);
         asteroids[i].setCoord(coord.x, coord.y);
-        asteroids[i].setDirection(0, (float)(1 - Math.random()*2)/2.0f, (float)Math.random());
+        asteroids[i].setDirection(0, dir.x, dir.y);
         asteroids[i].active = true;
         return true;
       }
     }
     return false;
   }
-  public boolean add_asteroid(float size){ return this.add_asteroid(size, new Point((float)Math.random()*this.WIDTH_WINDOW, 0));}
-  public boolean splitAsteroid(Asteroid asteroid){
-    boolean ast1 = this.add_asteroid(asteroid.size_shape/2.0f, new Point(asteroid.x, asteroid.y));
-    boolean ast2 = this.add_asteroid(asteroid.size_shape/2.0f, new Point(asteroid.x, asteroid.y));
-    return ast1 || ast2;
+  public boolean add_asteroid(float size, Point coord){
+    float speed = 15.0f/size;
+    return this.add_asteroid(size, coord, new Point(
+      speed*speedAsteroids*(float)(1 - Math.random()*2)/2.0f,
+      speed*speedAsteroids*(float)(1 - 2*Math.random())));
   }
+  public boolean add_asteroid(float size){ return this.add_asteroid(size, new Point(
+                        (float)Math.random()*this.WIDTH_WINDOW, 
+                        Math.random() > 0.5 ? 0 : this.HEIGHT_WINDOW));}
+
+  public boolean splitAsteroid(Asteroid asteroid){
+    boolean ast1 = this.add_asteroid(asteroid.size_shape/2.0f, new Point(asteroid.x - asteroid.size_shape/2, asteroid.y));
+    boolean ast2 = this.add_asteroid(asteroid.size_shape/2.0f, new Point(asteroid.x + asteroid.size_shape/2, asteroid.y));
+    boolean ast3 = false;
+    if (asteroid.size_shape > 50){
+      ast3 = this.add_asteroid(asteroid.size_shape/2.0f, new Point(asteroid.x, asteroid.y), new Point(asteroid.dirX*0.97f, asteroid.dirY*0.97f));
+    }
+    return ast1 || ast2 || ast3;
+  }
+
+
   public void update(){
     //boolean addAsteroid = Math.random() > 0.1f;
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
@@ -41,6 +58,13 @@ public class AsteroidsHandler {
       if (asteroids[i].active){
         asteroids[i].update(WIDTH_WINDOW, HEIGHT_WINDOW);
       }
+    }
+    speedAsteroids += 0.0001;
+    max_asteroid_cont += 0.0005;
+    if ((int) max_asteroid_cont != MAX_ASTEROIDS && MAX_ASTEROIDS+1 < 100){
+      asteroids[MAX_ASTEROIDS] = new Asteroid(100000, 100000);
+      MAX_ASTEROIDS = (int) max_asteroid_cont;
+      System.out.println("MAX_ASTEROIDS changed! now: " + MAX_ASTEROIDS);
     }
     //if (addAsteroid) this.add_asteroid(Math.random())
   }
@@ -55,9 +79,19 @@ public class AsteroidsHandler {
 
   public int active_asteroids() {
     int active_ast = 0;
-    for (Asteroid asteroid : asteroids) 
+    for (Asteroid asteroid : asteroids){
+      if (asteroid == null) break;
       if (asteroid.active) active_ast++;
+    }
     return active_ast;
+  }
+  public void reset(){
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+      asteroids[i].active = false;
+    }
+    speedAsteroids = 1;
+    MAX_ASTEROIDS = 10;
+    max_asteroid_cont = 10;
   }
 
 }

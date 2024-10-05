@@ -10,8 +10,14 @@ public class Point {
   }
 
   // Vector style functions
+  public float distance(Point p2){
+    return (float)Math.sqrt((p2.x - x)*(p2.x-x) + (p2.y - y)*(p2.y - y));
+  }
+  public float magnitude() {
+    return (float) Math.sqrt(x*x + y*y);
+  }
   public void normalize(){
-    float magnitude = (float) Math.sqrt(x*x + y*y);
+    float magnitude = this.magnitude();
     this.x /= magnitude;
     this.y /= magnitude;
   }

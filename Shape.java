@@ -20,8 +20,18 @@ public class Shape {
     this.verticesX = new int[this.size];
     this.verticesY = new int[this.size];
   }
+  // The only thing i will allow!!!
+  public void scale(float amount){
+    for (int i = 0; i < size; i++) {
+      this.baseVertices[i] = new Point((float)((this.baseVertices[i].x - this.centerX)*amount + this.centerX),
+                             (float)((this.baseVertices[i].y - this.centerY)*amount + this.centerY));
+    }
+  }
   public Point[] getPoints(){
     return this.baseVertices;
+  }
+  public void setPoint(int indx, Point point){
+    this.baseVertices[indx] = point;
   }
   public void Draw(Graphics2D g2d, int posX, int posY, float angle){
     double x, y;
