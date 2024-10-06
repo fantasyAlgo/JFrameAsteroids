@@ -1,14 +1,36 @@
 # JFrameAsteroids
-Copy of the game Asteroids in the uselessy complicated JFrame library
+Copy of the game Asteroids in the uselessy complicated JFrame library.
+#### Requirements
+- JDK
+- A functioning brain
+#### How to
+```bash
+git clone https://github.com/fantasyAlgo/JFrameAsteroids.git
+```
+Now, if you're on linux/macos, then you just need to run the run.sh script, if you're on windows, then you can compile and run using the following:
+```bash
+javac $(find . -name "*.java")
+java Main
+# This is for deleting the .class files after the program has finished.
+find . -name "*.class" -type f -delete
+```
+### Features
+- This game uses no textures, it is all procedurally generated (starting from basic vertices).
+- Because it is procedurally generated, the asteroids are all different
+- You can play it using the arrow keys to go up, rotating to the left and rotating to the right, you can shoot using the space key
+- The goal of this game is to have the highest score, so good luck sigmas of australia!
 
-TODO:
-- [ ] Refactor the code in a more "java like" way
+
+
+### TODO:
+- [ ] Refactor the code in a "java like" way
 - [x] Particle system for exploding asteroids
 - [x] Death animation for player
 - [x] Animation for when player is moving
-- [ ] Add that you need to shot more when dealing with big asteroids
 - [x] Sound effects and background music
-- [x] Some UI/GUI
-- [ ] Collision responce for asteroids
-- [ ] Alien spaceship AI
-- [ ] Sound music
+- [x] Some UI/GUI * Option button is still not implemented
+- [ ] Fullscreen * I tried implementing it, but for some reason was really buggy and unplayable, so i'll save it for future (me)s
+- [x] Alien spaceship AI
+- [x] Sound music * Half done, the Clip class is really bad for this sort of things, so i need to rewrite the whole sound stuff using SourceDataLine.
+- [ ] Ability to change the keybindings
+- [ ] Dunno, i'm open to suggestions

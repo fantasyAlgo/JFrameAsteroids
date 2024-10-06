@@ -36,7 +36,6 @@ public class GUI {
     asteroid1.make_shape(60f);
     asteroid2.make_shape(60f);
     fake_player.setCoord(windowWidth/2-10, windowHeight/2 - windowHeight/(4.5f));
-    System.out.println(fake_player.x);
 
     try {
       InputStream is = getClass().getResourceAsStream("/Fonts/Hyperspace.ttf");
@@ -53,7 +52,6 @@ public class GUI {
 
   public void DrawGameUI(Graphics2D g2d, boolean playerAlive){
     g2d.drawString(""+this.points, 10, 32);
-    if (!playerAlive) g2d.drawString("You loser", this.windowWidth/2-44, 32);
     return;
   }
 
@@ -81,7 +79,7 @@ public class GUI {
     g2.setColor(Color.white);
     g2.drawString(text, x, y);
     
-    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
     y += GamePanel.tileSize*1f;
     this.drawSelection(g2, "New game", y, commandNum == 0);
     y += GamePanel.tileSize*1.5f;

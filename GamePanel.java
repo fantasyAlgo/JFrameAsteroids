@@ -142,7 +142,6 @@ public class GamePanel extends JPanel implements Runnable{
         if (asteroid.size_shape > 20.0f)
           asteroidsHandler.splitAsteroid(asteroid);
 
-        System.out.println("Shintaro!");
         sound.setVolume( (asteroid.size_shape - 40)/5);
         sound.play();
         gui.addPoints(asteroid.size_shape);
