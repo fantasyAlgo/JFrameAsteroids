@@ -14,6 +14,12 @@ public class Helpers {
   public static boolean isInside(int WIDTH, int HEIGHT, int x, int y){
     return !(x <= 0 || y <= 0 || x >= WIDTH || y >= HEIGHT);
   }
+  public static float linearFunction(float s, float x, Point pos){
+    return s*x + (pos.y - s*pos.x);
+  }
+  public static boolean isInRange(float val, float constraint, float error){
+    return val > constraint-error && val < constraint+error;
+  }
 
   private static int ccw(Point a, Point b, Point c) {
 		/*

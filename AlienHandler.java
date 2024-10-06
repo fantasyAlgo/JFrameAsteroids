@@ -53,9 +53,45 @@ public class AlienHandler {
       if (alien.active){
         //System.out.println(alien.x + " | " + alien.y);
         this.shape.Draw(g2d, (int)alien.x, (int)alien.y, (float)Math.PI);
+        alien.ballotHandler.Draw(g2d);
       }
     }
   }
 
+  public boolean isColliding(ParticleSystem particleSystem, Asteroid asteroid) {
+    float collider; 
+    for (Alien alien : aliens) {
+      if (alien == null) break;
+      collider = CollisionHandler.collisionSAT(asteroid.shape, shape, asteroid, alien);
+      if (collider != 10000.0f){
+        particleSystem.add_boom_particles(alien, 40f);
+        alien.kill();
+        return true;
+      }
+    }
+    return false;
+  }
+  public boolean isBallotColliding(Shape entityShape, Entity entity){
+    for (Alien alien : aliens) {
+      if (alien == null) break;
+      if (alien.ballotHandler.isColliding(entityShape, entity)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  public int getActiveNumber(){
+    int n = 0;
+    for (Alien alien : aliens) {
+      n += alien.active ? 1 : 0;
+    }
+    return n;
+  }
+  public void reset(){
+    for (Alien alien : aliens) {
+      if (alien == null) break;
+      alien.kill();
+    }
+  }
 
 }

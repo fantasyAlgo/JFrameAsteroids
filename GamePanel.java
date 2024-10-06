@@ -40,10 +40,11 @@ public class GamePanel extends JPanel implements Runnable{
   Thread gameThread;
   KeyHandler keyHandler = new KeyHandler();
   Sound sound = new Sound();
+  Sound bgTitleScreenSound = new Sound();
   GUI gui = new GUI(screenWidth, screenHeight);
 
   // Objects
-  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.15f, 10);
+  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.15f, 1);
   AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
   ParticleSystem particleSystem = new ParticleSystem();
   AlienHandler alienHandler = new AlienHandler(5);
@@ -55,8 +56,6 @@ public class GamePanel extends JPanel implements Runnable{
     this.setDoubleBuffered(true);
     this.addKeyListener(keyHandler);
     this.setFocusable(true);
-
-    alienHandler.add();
 
     gameState = GameState.TitleScreen;
   }
@@ -74,6 +73,10 @@ public class GamePanel extends JPanel implements Runnable{
     int drawCount = 0;
     time++;
     sound.setFile(0);
+    sound.setVolume(0);
+    bgTitleScreenSound.setFile(1);
+    bgTitleScreenSound.setVolume(-10f);
+    bgTitleScreenSound.loop();
 
     while (gameThread != null) {
       currentTime = System.nanoTime();
@@ -98,10 +101,12 @@ public class GamePanel extends JPanel implements Runnable{
   public void update(){
     if (gameState == GameState.TitleScreen )return;
     if (gameState == GameState.PrepareToRun){
+      bgTitleScreenSound.stop();
       gameState = GameState.GameScreen;
       playerH.reset();
       asteroidsHandler.reset();
       playerH.ballotsHandler.reset();
+      alienHandler.reset();
       gui.points = 0;
       return;
     }
@@ -115,31 +120,55 @@ public class GamePanel extends JPanel implements Runnable{
       time++;
       asteroidsHandler.add_asteroid(Math.max((float)Math.random()*60, 30.0f));
     }
+    if (Math.random() < 0.001 && asteroidsHandler.MAX_ASTEROIDS >= 11 && alienHandler.getActiveNumber() == 0){
+      alienHandler.add();
+    }
     // Collision detection
-    float collision;
     for (Asteroid asteroid: asteroidsHandler.asteroids) {
       if (asteroid == null) break;
       if (asteroid.active){
-        collision = CollisionHandler.collisionSAT(asteroid.shape, playerH.shape, asteroid, playerH);
-        if (collision != 10000f){
+        if (playerH.isColliding(asteroid.shape, asteroid)){
           particleSystem.add_boom_particles(playerH, 100f);
           playerH.kill();
           gameState = GameState.DeathScreen;
           //sound.setFile(0);
           sound.play();
+
           //playSE(0);
         }
+        alienHandler.isColliding(particleSystem, asteroid);
       }
-    }
-    for (Asteroid asteroid: asteroidsHandler.asteroids) {
-      if (asteroid == null) break;
-      if (asteroid.active && playerH.ballotsHandler.isColliding(asteroid)){
+      if (asteroid.active && (playerH.ballotsHandler.isColliding(asteroid.shape, asteroid) || alienHandler.isBallotColliding(asteroid.shape, asteroid))){
         if (asteroid.size_shape > 20.0f)
           asteroidsHandler.splitAsteroid(asteroid);
+
+        System.out.println("Shintaro!");
+        sound.setVolume( (asteroid.size_shape - 40)/5);
         sound.play();
         gui.addPoints(asteroid.size_shape);
         particleSystem.add_boom_particles(asteroid, asteroid.size_shape);
         asteroid.kill();
+      }
+    }
+    for (Alien alien : alienHandler.aliens) {
+      if (alien == null) break;
+      if (alien.active && playerH.isColliding(alienHandler.shape, alien)){
+        particleSystem.add_boom_particles(playerH, 100f);
+        playerH.kill();
+        gameState = GameState.DeathScreen;
+        //sound.setFile(0);
+        sound.play();
+      }
+      if (alien.active && (playerH.ballotsHandler.isColliding(alienHandler.shape, alien))){
+        particleSystem.add_boom_particles(alien, 40f);
+        alien.kill();
+        sound.play();
+      }
+      if (alien.active && alien.ballotHandler.isColliding(playerH.shape, playerH)){
+          particleSystem.add_boom_particles(playerH, 100f);
+          playerH.kill();
+          gameState = GameState.DeathScreen;
+          sound.play();
       }
     }
 
@@ -163,6 +192,7 @@ public class GamePanel extends JPanel implements Runnable{
       gui.DrawGameUI(g2, playerH.isAlive);
       if (gameState == GameState.DeathScreen){
         gameState = gui.DrawDeathUI(g2, keyHandler);
+        if (gameState == GameState.TitleScreen) bgTitleScreenSound.loop();
       }
     }
     

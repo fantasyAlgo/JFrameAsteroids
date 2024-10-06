@@ -58,10 +58,10 @@ public class BallotsHandler {
     }
     //System.out.println("#############");
   }
-  public boolean isColliding(Asteroid asteroid){
+  public boolean isColliding(Shape entityShape, Entity entity){
     float collider;
     for (Ballot ballot : ballots) {
-      collider = CollisionHandler.collisionSAT(asteroid.shape, ballotShape, asteroid, ballot);
+      collider = CollisionHandler.collisionSAT(entityShape, ballotShape, entity, ballot);
       if (collider != 10000.0){
         ballot.kill();
         return true;

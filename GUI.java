@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 
 
 
@@ -19,10 +20,13 @@ public class GUI {
   // For the title screen;
   Asteroid asteroid1 = new Asteroid(GamePanel.screenWidth-90, GamePanel.screenHeight/2);
   Asteroid asteroid2 = new Asteroid(90, GamePanel.screenHeight/2);
+  PlayerHandler fake_player = new PlayerHandler(GamePanel.screenWidth, GamePanel.screenHeight, 0.2f, 1.5f);
 
   int commandNum = 0;
   boolean isUpPressed = false;
   boolean isDownPressed = false;
+  float angle = 0;
+  Font hyperspace;
 
 
   public GUI(int windowWidth, int windowHeight){
@@ -31,6 +35,17 @@ public class GUI {
     points = 0;
     asteroid1.make_shape(60f);
     asteroid2.make_shape(60f);
+    fake_player.setCoord(windowWidth/2-10, windowHeight/2 - windowHeight/(4.5f));
+    System.out.println(fake_player.x);
+
+    try {
+      InputStream is = getClass().getResourceAsStream("/Fonts/Hyperspace.ttf");
+      hyperspace = Font.createFont(Font.TRUETYPE_FONT, is);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+
   }
   public void addPoints(float size){
     points += size/10.0f;
@@ -43,6 +58,7 @@ public class GUI {
   }
 
   public GameState DrawDeathUI(Graphics2D g2, KeyHandler keyHandler){
+    g2.setFont(hyperspace);
     updateCommandNum(keyHandler);
     commandNum = Math.min(Math.max(0, commandNum), 1);
     int width = 350;
@@ -52,6 +68,7 @@ public class GUI {
     g2.fillRoundRect(GamePanel.screenWidth/2-width/2, GamePanel.screenHeight/2 - height/2, width, height, 35, 35);
     g2.setColor(Color.black);
     g2.fillRoundRect(GamePanel.screenWidth/2-(width/2)+stroke, GamePanel.screenHeight/2 - (height/2)+stroke, width-stroke*2, height-stroke*2, 35, 35);
+
 
     g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
     String text = "You lost!";
@@ -80,6 +97,7 @@ public class GUI {
 
 
   public GameState DrawTitleScreen(Graphics2D g2, GameState page, KeyHandler keyHandler){
+    g2.setFont(hyperspace);
     this.updateCommandNum(keyHandler);
     if (keyHandler.enterPressed){
       switch (commandNum) {
@@ -117,6 +135,11 @@ public class GUI {
 
     asteroid1.Draw(g2);
     asteroid2.Draw(g2);
+    fake_player.setDirection(angle + (float)Math.PI/2, (float)Math.cos(angle), (float)Math.sin(angle));
+    angle += 0.006f;
+
+    fake_player.update();
+    fake_player.Draw(g2);
 
     return GameState.TitleScreen;
   }

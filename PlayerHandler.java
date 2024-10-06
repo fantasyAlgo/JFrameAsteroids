@@ -21,7 +21,7 @@ public class PlayerHandler extends Entity {
   float acc_y = 0;
 
   float speed;
-  int size;
+  float size;
 
   int windowWidth;
   int windowHeight;
@@ -30,10 +30,12 @@ public class PlayerHandler extends Entity {
 
   boolean isSpacePressed = false;
 
-  public PlayerHandler(int windowWidth, int windowHeight, float speed, int size){
+  public PlayerHandler(int windowWidth, int windowHeight, float speed, float size){
     super(windowWidth/2, windowHeight/2);
     this.speed = speed;
     this.size = size;
+    shape.scale(this.size);
+    rayShape.scale(this.size);
     this.windowHeight = windowHeight;
     this.windowWidth = windowWidth;
     this.isAlive = true;
@@ -72,10 +74,10 @@ public class PlayerHandler extends Entity {
     }
     acc_x *= 0.97;
     acc_y *= 0.97;
-    if (this.x+ acc_x > this.windowWidth) this.x= 0;
-    if (this.x + acc_x < 0) this.x = this.windowWidth;
-    if (this.y + acc_y > this.windowHeight) this.y = 0;
-    if (this.y + acc_y < 0) this.y = this.windowHeight;
+    if (this.x > this.windowWidth) this.x= 0;
+    if (this.x < 0) this.x = this.windowWidth;
+    if (this.y > this.windowHeight) this.y = 0;
+    if (this.y < 0) this.y = this.windowHeight;
 
     Transform(acc_x, acc_y);
     if (spacePressed && !isSpacePressed){
@@ -87,6 +89,9 @@ public class PlayerHandler extends Entity {
     this.isAlive = true;
     this.setCoord(this.windowWidth/2, this.windowHeight/2);
     this.setDirection(0, 0F, 1F);
+  }
+  public boolean isColliding(Shape shape, Entity entity){
+    return CollisionHandler.collisionSAT(this.shape, shape, this, entity) != 10000;
   }
 
 }

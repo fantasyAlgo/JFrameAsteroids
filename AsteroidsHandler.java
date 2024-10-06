@@ -60,7 +60,7 @@ public class AsteroidsHandler {
       }
     }
     speedAsteroids += 0.0001;
-    max_asteroid_cont += 0.0005;
+    max_asteroid_cont += 0.00025;
     if ((int) max_asteroid_cont != MAX_ASTEROIDS && MAX_ASTEROIDS+1 < 100){
       asteroids[MAX_ASTEROIDS] = new Asteroid(100000, 100000);
       MAX_ASTEROIDS = (int) max_asteroid_cont;
