@@ -34,7 +34,6 @@ public class Sound {
       if (clip.isRunning()){
         clip.setFramePosition(0); // Rewind to the beginning
       }else{
-        System.out.println("hello world");
         clip.start();
         clip.setFramePosition(0);
       }

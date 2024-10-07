@@ -9,10 +9,9 @@ git clone https://github.com/fantasyAlgo/JFrameAsteroids.git
 ```
 Now, if you're on linux/macos, then you just need to run the run.sh script, if you're on windows, then you can compile and run using the following:
 ```bash
-javac $(find . -name "*.java")
+javac *.java
 java Main
-# This is for deleting the .class files after the program has finished.
-find . -name "*.class" -type f -delete
+# This is for deleting the .class files after the program has finished. find . -name "*.class" -type f -delete
 ```
 ### Features
 - This game uses no textures, it is all procedurally generated (starting from basic vertices).

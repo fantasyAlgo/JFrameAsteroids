@@ -64,7 +64,7 @@ public class AsteroidsHandler {
     if ((int) max_asteroid_cont != MAX_ASTEROIDS && MAX_ASTEROIDS+1 < 100){
       asteroids[MAX_ASTEROIDS] = new Asteroid(100000, 100000);
       MAX_ASTEROIDS = (int) max_asteroid_cont;
-      System.out.println("MAX_ASTEROIDS changed! now: " + MAX_ASTEROIDS);
+      //System.out.println("MAX_ASTEROIDS changed! now: " + MAX_ASTEROIDS);
     }
     //if (addAsteroid) this.add_asteroid(Math.random())
   }
