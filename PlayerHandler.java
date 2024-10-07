@@ -15,19 +15,17 @@ public class PlayerHandler extends Entity {
     new Point(20, 50),
     new Point(27, 50)
   });
-  boolean isAlive = true;
+  BallotsHandler ballotsHandler;
 
+  boolean isAlive = true;
   float acc_x = 0;
   float acc_y = 0;
-
   float speed;
+  float angle_speed = 0.035f;
   float size;
 
   int windowWidth;
   int windowHeight;
-
-  BallotsHandler ballotsHandler;
-
   boolean isSpacePressed = false;
 
   public PlayerHandler(int windowWidth, int windowHeight, float speed, float size){
@@ -66,8 +64,8 @@ public class PlayerHandler extends Entity {
   }
   public void React(boolean leftPressed, boolean rightPressed, boolean upPressed, boolean spacePressed){
     if (!this.isAlive) return;
-    if (rightPressed) this.angle += 0.035f;
-    if (leftPressed) this.angle -= 0.035f;
+    if (rightPressed) this.angle += angle_speed;
+    if (leftPressed) this.angle -= angle_speed;
     if (upPressed){
       acc_x += this.speed*Math.sin(this.angle);
       acc_y += -(this.speed*Math.cos(this.angle));

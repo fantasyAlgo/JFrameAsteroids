@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
  */
 public class AlienHandler {
   final int MAX_ALIENS = 2;
+  int MAX_ASTEROIDS= 0;
   float size;
   Alien[] aliens;
   Shape shape = new Shape(0, 0, new Point[] {

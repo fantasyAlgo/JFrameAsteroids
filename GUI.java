@@ -17,6 +17,9 @@ public class GUI {
   public int windowWidth;
   public int windowHeight;
 
+  public final int n_options = 2;
+  public float[] options = new float[n_options];
+
   // For the title screen;
   Asteroid asteroid1 = new Asteroid(GamePanel.screenWidth-90, GamePanel.screenHeight/2);
   Asteroid asteroid2 = new Asteroid(90, GamePanel.screenHeight/2);
@@ -27,6 +30,7 @@ public class GUI {
   boolean isDownPressed = false;
   float angle = 0;
   Font hyperspace;
+
 
 
   public GUI(int windowWidth, int windowHeight){
@@ -43,8 +47,10 @@ public class GUI {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-
+    for (int i = 0; i < n_options; i++) {
+      options[i] = 0.0f;
+    }
+    
   }
   public void addPoints(float size){
     points += size/10.0f;
@@ -88,11 +94,52 @@ public class GUI {
     if (keyHandler.enterPressed && commandNum == 0){
       return GameState.PrepareToRun;
     }else if (keyHandler.enterPressed && commandNum == 1){
+      keyHandler.enterPressed = false;
       return GameState.TitleScreen;
     }
     return GameState.DeathScreen;
   }
 
+  public GameState DrawOptionScreen(Graphics2D g2, GameState page, KeyHandler keyHandler){
+    g2.setFont(hyperspace);
+    this.updateCommandNum(keyHandler);
+    if (keyHandler.enterPressed && commandNum == 2){
+      commandNum = -1;
+      keyHandler.enterPressed = false;
+      return GameState.TitleScreen;
+    }
+    asteroid1.angle -= 0.001;
+    asteroid2.angle += 0.001;
+
+    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 76F));
+    String text = "Options!";
+    int x = getXForCenteredText(g2, text);
+    int y = GamePanel.tileSize*2;
+
+    int grayAmount = 30;
+    g2.setColor(new Color(grayAmount, grayAmount, grayAmount));
+    g2.drawString(text, x-3, y+3);
+    g2.setColor(Color.white);
+    g2.drawString(text, x, y);
+
+    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+    y += GamePanel.tileSize*2.5f;
+    this.drawBarSelection(g2, "speed", y, 0, commandNum, keyHandler, 0.01f, 0.5f);
+    y += GamePanel.tileSize*1.5f;
+    this.drawBarSelection(g2, "Angle speed", y, 1, commandNum, keyHandler, 0.01f, 0.07f);
+    y += GamePanel.tileSize*1.5f;
+    this.drawSelection(g2, "Back", y, commandNum == 2);
+
+    asteroid1.Draw(g2);
+    asteroid2.Draw(g2);
+    fake_player.setDirection(angle + (float)Math.PI/2, (float)Math.cos(angle), (float)Math.sin(angle));
+    angle += 0.006f;
+
+    fake_player.update();
+    fake_player.Draw(g2);
+
+    return GameState.OptionsScreen;
+  }
 
   public GameState DrawTitleScreen(Graphics2D g2, GameState page, KeyHandler keyHandler){
     g2.setFont(hyperspace);
@@ -102,7 +149,7 @@ public class GUI {
         case 0:
            return GameState.PrepareToRun;
         case 1:
-          return GameState.TitleScreen;
+          return GameState.OptionsScreen;
         case 2:
           return GameState.ExitScreen;
       }
@@ -152,6 +199,19 @@ public class GUI {
     }else if (!keyHandler.downPressed) isDownPressed = false;
     commandNum = Math.min(Math.max(0, commandNum), 2);
 
+  }
+  private void drawBarSelection(Graphics2D g2, String text, float y, int indx, int commandNum, KeyHandler keyHandler, float minV, float maxV){
+    float ratio = (maxV-minV)/100.0f;
+    int x = getXForCenteredText(g2, text);
+    y += GamePanel.tileSize*1.5f;
+    g2.drawString(text + " " + String.format("%.3f", options[indx]) , x-x/6, y);
+    if (commandNum == indx){
+      g2.drawString(">", x - x/6 - GamePanel.tileSize, y);
+      if (keyHandler.leftPressed){
+        options[indx] -= ratio;
+      }else if (keyHandler.rightPressed) options[indx] += ratio;
+      options[indx] = Math.max(minV, Math.min(maxV, options[indx]));
+    }
   }
   private void drawSelection(Graphics2D g2, String text, float y, boolean isSelected){
     int x = getXForCenteredText(g2, text);

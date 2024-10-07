@@ -3,7 +3,7 @@ Copy of the game Asteroids in the uselessy complicated JFrame library.
 #### Requirements
 - JDK
 - A functioning brain
-#### How to
+#### How to run
 ```bash
 git clone https://github.com/fantasyAlgo/JFrameAsteroids.git
 ```
@@ -11,13 +11,12 @@ Now, if you're on linux/macos, then you just need to run the run.sh script, if y
 ```bash
 javac *.java
 java Main
-# This is for deleting the .class files after the program has finished. find . -name "*.class" -type f -delete
 ```
 ### Features
 - This game uses no textures, it is all procedurally generated (starting from basic vertices).
 - Because it is procedurally generated, the asteroids are all different
 - You can play it using the arrow keys to go up, rotating to the left and rotating to the right, you can shoot using the space key
-- The goal of this game is to have the highest score, so good luck sigmas of australia!
+- The goal of this game is to have the highest score, so good luck sigmas of github!
 
 
 

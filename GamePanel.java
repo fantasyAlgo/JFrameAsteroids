@@ -18,7 +18,8 @@ enum GameState {
   GameScreen,
   DeathScreen,
   ExitScreen,
-  PrepareToRun
+  PrepareToRun,
+  OptionsScreen
 };
 
 public class GamePanel extends JPanel implements Runnable{
@@ -31,6 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
   final static int maxScreenRow = 12;
   final static int screenWidth = tileSize*maxScreenCol;
   final static int screenHeight = tileSize*maxScreenRow;
+  final float init_player_speed = 0.15f;
 
   int time = 0;
   int FPS = 144;
@@ -44,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
   GUI gui = new GUI(screenWidth, screenHeight);
 
   // Objects
-  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, 0.15f, 1);
+  PlayerHandler playerH = new PlayerHandler(screenWidth, screenHeight, init_player_speed, 1);
   AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
   ParticleSystem particleSystem = new ParticleSystem();
   AlienHandler alienHandler = new AlienHandler(5);
@@ -58,6 +60,8 @@ public class GamePanel extends JPanel implements Runnable{
     this.setFocusable(true);
 
     gameState = GameState.TitleScreen;
+    gui.options[0] = init_player_speed;
+    gui.options[1] = this.playerH.angle_speed;
   }
   public void startGameThread(){
     gameThread = new Thread(this);
@@ -99,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
   }
   public void update(){
-    if (gameState == GameState.TitleScreen )return;
+    if (gameState == GameState.TitleScreen || gameState == GameState.OptionsScreen)return;
     if (gameState == GameState.PrepareToRun){
       bgTitleScreenSound.stop();
       gameState = GameState.GameScreen;
@@ -120,7 +124,9 @@ public class GamePanel extends JPanel implements Runnable{
       time++;
       asteroidsHandler.add_asteroid(Math.max((float)Math.random()*60, 30.0f));
     }
-    if (Math.random() < 0.001 && asteroidsHandler.MAX_ASTEROIDS >= 11 && alienHandler.getActiveNumber() == 0){
+    if (Math.random() < 0.0005 && asteroidsHandler.MAX_ASTEROIDS >= 11 && alienHandler.getActiveNumber() == 0 
+      && asteroidsHandler.MAX_ASTEROIDS != alienHandler.MAX_ASTEROIDS){
+      alienHandler.MAX_ASTEROIDS = asteroidsHandler.MAX_ASTEROIDS;
       alienHandler.add();
     }
     // Collision detection
@@ -181,6 +187,12 @@ public class GamePanel extends JPanel implements Runnable{
     g2.setColor(Color.white);
     if (gameState == GameState.TitleScreen){
       gameState = gui.DrawTitleScreen(g2, gameState, keyHandler);
+    }
+    if (gameState == GameState.OptionsScreen){
+      gameState = gui.DrawOptionScreen(g2, gameState, keyHandler);
+      this.playerH.speed = gui.options[0];
+      this.playerH.angle_speed = gui.options[1];
+      
     }
     if (gameState == GameState.GameScreen || gameState == GameState.DeathScreen){
       playerH.Draw(g2);
