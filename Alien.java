@@ -14,7 +14,8 @@ public class Alien extends Entity{
   public Alien(){
     super(0, 0);
     active = false;
-    ballotHandler = new BallotsHandler(MAX_BALLOTS, GamePanel.screenWidth, GamePanel.screenHeight); }
+    ballotHandler = new BallotsHandler(MAX_BALLOTS, GamePanel.screenWidth, GamePanel.screenHeight);
+  }
   public void activate(){
     this.active = true;
     this.setCoord((Math.random() > .5 ? 10 : (float)GamePanel.screenHeight)-10, (float)Math.random()*GamePanel.HEIGHT);

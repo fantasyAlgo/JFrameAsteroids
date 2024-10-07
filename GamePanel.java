@@ -119,8 +119,7 @@ public class GamePanel extends JPanel implements Runnable{
     asteroidsHandler.update();
     particleSystem.update();
     alienHandler.update(asteroidsHandler.asteroids, playerH);
-
-    if (Math.random() < 0.005 && asteroidsHandler.active_asteroids() < asteroidsHandler.MAX_ASTEROIDS/2.0){
+    if (asteroidsHandler.canSpawn()){
       time++;
       asteroidsHandler.add_asteroid(Math.max((float)Math.random()*60, 30.0f));
     }

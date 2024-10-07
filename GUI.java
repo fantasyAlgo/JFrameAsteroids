@@ -65,6 +65,7 @@ public class GUI {
     g2.setFont(hyperspace);
     updateCommandNum(keyHandler);
     commandNum = Math.min(Math.max(0, commandNum), 1);
+
     int width = 350;
     int height = 400;
     int stroke = 5;
@@ -103,7 +104,9 @@ public class GUI {
   public GameState DrawOptionScreen(Graphics2D g2, GameState page, KeyHandler keyHandler){
     g2.setFont(hyperspace);
     this.updateCommandNum(keyHandler);
-    if (keyHandler.enterPressed && commandNum == 2){
+
+    if (keyHandler.enterPressed && commandNum == 3){
+      keyHandler.enterPressed = false;
       commandNum = -1;
       keyHandler.enterPressed = false;
       return GameState.TitleScreen;
@@ -128,7 +131,11 @@ public class GUI {
     y += GamePanel.tileSize*1.5f;
     this.drawBarSelection(g2, "Angle speed", y, 1, commandNum, keyHandler, 0.01f, 0.07f);
     y += GamePanel.tileSize*1.5f;
-    this.drawSelection(g2, "Back", y, commandNum == 2);
+    this.drawSelection(g2, "WASD " + (KeyHandler.allow_wasd ? "X" : " "), y, commandNum == 2, keyHandler, () -> {KeyHandler.allow_wasd = !KeyHandler.allow_wasd;});
+    y += GamePanel.tileSize*1.5f;
+    this.drawSelection(g2, "Back", y, commandNum == 3);
+
+
 
     asteroid1.Draw(g2);
     asteroid2.Draw(g2);
@@ -144,7 +151,10 @@ public class GUI {
   public GameState DrawTitleScreen(Graphics2D g2, GameState page, KeyHandler keyHandler){
     g2.setFont(hyperspace);
     this.updateCommandNum(keyHandler);
+    commandNum = Math.min(Math.max(0, commandNum), 2);
+
     if (keyHandler.enterPressed){
+      keyHandler.enterPressed = false;
       switch (commandNum) {
         case 0:
            return GameState.PrepareToRun;
@@ -197,7 +207,7 @@ public class GUI {
       commandNum++;
       isDownPressed = true;
     }else if (!keyHandler.downPressed) isDownPressed = false;
-    commandNum = Math.min(Math.max(0, commandNum), 2);
+    commandNum = Math.min(Math.max(0, commandNum), 3);
 
   }
   private void drawBarSelection(Graphics2D g2, String text, float y, int indx, int commandNum, KeyHandler keyHandler, float minV, float maxV){
@@ -213,6 +223,17 @@ public class GUI {
       options[indx] = Math.max(minV, Math.min(maxV, options[indx]));
     }
   }
+  private void drawSelection(Graphics2D g2, String text, float y, boolean isSelected, KeyHandler keyHandler, EventButton eventButton){
+    int x = getXForCenteredText(g2, text);
+    y += GamePanel.tileSize*1.5f;
+    g2.drawString(text, x, y);
+    if (isSelected) g2.drawString(">", x - GamePanel.tileSize, y);
+    if (keyHandler.enterPressed){
+      keyHandler.enterPressed = false;
+      eventButton.event();
+    }
+  }
+
   private void drawSelection(Graphics2D g2, String text, float y, boolean isSelected){
     int x = getXForCenteredText(g2, text);
     y += GamePanel.tileSize*1.5f;
