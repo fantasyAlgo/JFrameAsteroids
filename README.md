@@ -7,11 +7,24 @@ Copy of the game Asteroids in the uselessy complicated JFrame library.
 ```bash
 git clone https://github.com/fantasyAlgo/JFrameAsteroids.git
 ```
-Now, if you're on linux/macos, then you just need to run the run.sh script, if you're on windows, then you can compile and run using the following:
+**There is now the .jar file!, now you just need to double click the Asteroids.jar file**
+If you want instead to compile it yourself instead, then on linux/bsd/macos you can use the ./deploy.sh file, or manually:
 ```bash
-javac *.java
-java Main
+javac -d out src/code/*.java
+jar cvfm Asteroids.jar manifest.txt -C out . -C src/Fonts . -C src/SoundEffects .
+rm -r out
 ```
+On the windows CMD
+```bash
+javac -d out src/code/*.java
+jar cvfm Asteroids.jar manifest.txt -C out . -C src/Fonts . -C src/SoundEffects .
+rmdir /s /q out
+```
+Then to run the .jar on the terminal/CMD:
+```bash
+java -jar Asteroids.jar
+```
+
 ### Features
 - This game uses no textures, it is all procedurally generated (starting from basic vertices).
 - Because it is procedurally generated, the asteroids are all different
