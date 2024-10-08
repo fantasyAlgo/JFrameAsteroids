@@ -20,7 +20,7 @@ public class KeyHandler implements KeyListener{
     if (code == KeyEvent.VK_RIGHT || (allow_wasd && code == KeyEvent.VK_D)) rightPressed = true;
     if (code == KeyEvent.VK_UP || (allow_wasd && code == KeyEvent.VK_W)) upPressed = true;
     if (code == KeyEvent.VK_DOWN || (allow_wasd && code == KeyEvent.VK_S)) downPressed = true;
-    if (code == KeyEvent.VK_SPACE ) spacePressed = true;
+    if (code == KeyEvent.VK_SPACE || (allow_wasd && code == KeyEvent.VK_K) ) spacePressed = true;
     if (code == KeyEvent.VK_TAB) tabPressed = true;
     if (code == KeyEvent.VK_ENTER) enterPressed = true;
   } 
@@ -31,7 +31,7 @@ public class KeyHandler implements KeyListener{
     if (code == KeyEvent.VK_RIGHT || (allow_wasd && code == KeyEvent.VK_D)) rightPressed = false;
     if (code == KeyEvent.VK_UP || (allow_wasd && code == KeyEvent.VK_W)) upPressed = false;
     if (code == KeyEvent.VK_DOWN || (allow_wasd && code == KeyEvent.VK_S))downPressed = false;
-    if (code == KeyEvent.VK_SPACE) spacePressed = false;
+    if (code == KeyEvent.VK_SPACE || (allow_wasd && code == KeyEvent.VK_K)) spacePressed = false;
     if (code == KeyEvent.VK_TAB) tabPressed = false;
     if (code == KeyEvent.VK_ENTER) enterPressed = false;
   }

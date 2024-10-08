@@ -7,20 +7,20 @@ Copy of the game Asteroids in the uselessy complicated JFrame library.
 ```bash
 git clone https://github.com/fantasyAlgo/JFrameAsteroids.git
 ```
-**There is now the .jar file!, now you just need to double click the Asteroids.jar file**
-If you want instead to compile it yourself instead, then on linux/bsd/macos you can use the ./deploy.sh file, or manually:
+**There is now the .jar file!, now you just need to double click the Asteroids.jar file**<br>
+If you want instead to compile it yourself, then if you're linux/macos you can either use the ./deploy.sh file, or by typing:
 ```bash
 javac -d out src/code/*.java
 jar cvfm Asteroids.jar manifest.txt -C out . -C src/Fonts . -C src/SoundEffects .
 rm -r out
 ```
-On the windows CMD
+On windows instead you can compile using this
 ```bash
 javac -d out src/code/*.java
 jar cvfm Asteroids.jar manifest.txt -C out . -C src/Fonts . -C src/SoundEffects .
 rmdir /s /q out
 ```
-Then to run the .jar on the terminal/CMD:
+Then you can run the .jar on the terminal/CMD using
 ```bash
 java -jar Asteroids.jar
 ```
@@ -28,7 +28,7 @@ java -jar Asteroids.jar
 ### Features
 - This game uses no textures, it is all procedurally generated (starting from basic vertices).
 - Because it is procedurally generated, the asteroids are all different
-- You can play it using the arrow keys to go up, rotating to the left and rotating to the right (you can change this into wasd), you can shoot using the space key
+- You can play it using the arrow keys to go up, rotating to the left and rotating to the right (you can change this into wasd), you can shoot using the space key (or k)
 - The goal of this game is to have the highest score (the bigger the asteroids is, the higher the reward). Good luck! 
 
 

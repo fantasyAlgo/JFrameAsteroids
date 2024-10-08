@@ -67,7 +67,7 @@ public class GUI {
     commandNum = Math.min(Math.max(0, commandNum), 1);
 
     int width = 360;
-    int height = 400;
+    int height = 410;
     int stroke = 5;
     g2.setColor(Color.WHITE);
     g2.fillRoundRect(GamePanel.screenWidth/2-width/2, GamePanel.screenHeight/2 - height/2, width, height, 35, 35);
@@ -76,7 +76,7 @@ public class GUI {
 
 
     g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
-    String text = "You lost!";
+    String text = "You died!";
     int x = getXForCenteredText(g2, text);
     int y = GamePanel.screenHeight/2 - height/2 + GamePanel.tileSize*2;
 
@@ -131,7 +131,7 @@ public class GUI {
     y += GamePanel.tileSize*1.5f;
     this.drawBarSelection(g2, "Angle speed", y, 1, commandNum, keyHandler, 0.01f, 0.07f);
     y += GamePanel.tileSize*1.5f;
-    this.drawSelection(g2, "WASD " + (KeyHandler.allow_wasd ? "X" : " "), y, commandNum == 2, keyHandler, () -> {KeyHandler.allow_wasd = !KeyHandler.allow_wasd;});
+    this.drawSelection(g2, "WASD+K " + (KeyHandler.allow_wasd ? "X" : " "), y, commandNum == 2, keyHandler, () -> {KeyHandler.allow_wasd = !KeyHandler.allow_wasd;});
     y += GamePanel.tileSize*1.5f;
     this.drawSelection(g2, "Back", y, commandNum == 3);
 
