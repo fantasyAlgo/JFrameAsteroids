@@ -1,7 +1,7 @@
 # JFrameAsteroids
 Copy of the game Asteroids in the uselessy complicated JFrame library.
 #### Requirements
-- JDK
+- JDK > 8.0
 - A functioning brain
 #### How to run
 ```bash
@@ -15,9 +15,8 @@ java Main
 ### Features
 - This game uses no textures, it is all procedurally generated (starting from basic vertices).
 - Because it is procedurally generated, the asteroids are all different
-- You can play it using the arrow keys to go up, rotating to the left and rotating to the right, you can shoot using the space key
-- The goal of this game is to have the highest score, so good luck sigmas of github!
-
+- You can play it using the arrow keys to go up, rotating to the left and rotating to the right (you can change this into wasd), you can shoot using the space key
+- The goal of this game is to have the highest score (the bigger the asteroids is, the higher the reward). Good luck! 
 
 
 ### TODO:
@@ -26,9 +25,9 @@ java Main
 - [x] Death animation for player
 - [x] Animation for when player is moving
 - [x] Sound effects and background music
-- [x] Some UI/GUI * Option button is still not implemented
+- [x] Some UI/GUI
 - [ ] Fullscreen * I tried implementing it, but for some reason was really buggy and unplayable, so i'll save it for future (me)s
 - [x] Alien spaceship AI
 - [x] Sound music * Half done, the Clip class is really bad for this sort of things, so i need to rewrite the whole sound stuff using SourceDataLine.
-- [ ] Ability to change the keybindings
+- [x] Ability to change the keybindings
 - [ ] Dunno, i'm open to suggestions

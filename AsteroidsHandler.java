@@ -87,10 +87,8 @@ public class AsteroidsHandler {
     }
   }
   public boolean canSpawn(){
-    if (peaceTime > 0){
-      System.out.println(peaceTime);
+    if (peaceTime > 0)
       return false;
-    }
     return Math.random() < 0.005 && this.active_asteroids() < this.MAX_ASTEROIDS/2.0;
   }
   public int active_asteroids() {

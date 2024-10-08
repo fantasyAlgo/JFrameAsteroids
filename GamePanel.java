@@ -59,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable{
     this.addKeyListener(keyHandler);
     this.setFocusable(true);
 
+    alienHandler.add();
     gameState = GameState.TitleScreen;
     gui.options[0] = init_player_speed;
     gui.options[1] = this.playerH.angle_speed;
@@ -123,8 +124,7 @@ public class GamePanel extends JPanel implements Runnable{
       time++;
       asteroidsHandler.add_asteroid(Math.max((float)Math.random()*60, 30.0f));
     }
-    if (Math.random() < 0.0005 && asteroidsHandler.MAX_ASTEROIDS >= 11 && alienHandler.getActiveNumber() == 0 
-      && asteroidsHandler.MAX_ASTEROIDS != alienHandler.MAX_ASTEROIDS){
+    if (Math.random() < 0.0005 && asteroidsHandler.MAX_ASTEROIDS > 10 && alienHandler.getActiveNumber() == 0 ){
       alienHandler.MAX_ASTEROIDS = asteroidsHandler.MAX_ASTEROIDS;
       alienHandler.add();
     }
@@ -166,6 +166,7 @@ public class GamePanel extends JPanel implements Runnable{
       if (alien.active && (playerH.ballotsHandler.isColliding(alienHandler.shape, alien))){
         particleSystem.add_boom_particles(alien, 40f);
         alien.kill();
+        gui.addPoints(40);
         sound.play();
       }
       if (alien.active && alien.ballotHandler.isColliding(playerH.shape, playerH)){
