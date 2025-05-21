@@ -1,4 +1,5 @@
 # JFrameAsteroids
+![asteroid_image](https://github.com/user-attachments/assets/6c85afc2-f7af-42e2-ade5-4e4a49b249da)
 Copy of the game Asteroids in the uselessy complicated JFrame library.
 #### Requirements
 - JDK > 8.0
