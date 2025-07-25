@@ -16,10 +16,12 @@ public class Alien extends Entity{
     active = false;
     ballotHandler = new BallotsHandler(MAX_BALLOTS, GamePanel.screenWidth, GamePanel.screenHeight);
   }
+
   public void activate(){
     this.active = true;
     this.setCoord((Math.random() > .5 ? 40 : (float)GamePanel.screenWidth)-40, (float)Math.random()*GamePanel.HEIGHT);
   }
+
   public Point getDisplacementForce(Asteroid[] asteroids, Entity player){
     Point pos = new Point(x, y);
     Point base_dir = new Point(0, 0);

@@ -3,7 +3,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.List;
 import java.awt.geom.Area;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -19,7 +27,8 @@ enum GameState {
   DeathScreen,
   ExitScreen,
   PrepareToRun,
-  OptionsScreen
+  OptionsScreen,
+  RankingScreen,
 };
 
 public class GamePanel extends JPanel implements Runnable{
@@ -32,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable{
   final static int maxScreenRow = 12;
   final static int screenWidth = tileSize*maxScreenCol;
   final static int screenHeight = tileSize*maxScreenRow;
+  final static String name_game_folder = "Fake_asteroid";
   final float init_player_speed = 0.15f;
 
   int time = 0;
@@ -50,7 +60,59 @@ public class GamePanel extends JPanel implements Runnable{
   AsteroidsHandler asteroidsHandler = new AsteroidsHandler(screenWidth, screenHeight);
   ParticleSystem particleSystem = new ParticleSystem();
   AlienHandler alienHandler = new AlienHandler(5);
+  
+  public boolean askForNewUser(){ 
+      String url = "http://fantasyendpoint.duckdns.org:5000/add_user";
+      HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+      HttpClient client = HttpClient.newBuilder().version(java.net.http.HttpClient.Version.HTTP_1_1).build();
+      try {
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Status: " + response.statusCode());
+        System.out.println("Body: " + response.body());
+        String cleaned = response.body().replaceAll("[:{},]", "");
+        String[] body = cleaned.split("\"");
+        gui.token = body[7];
+        gui.user_id = Integer.parseInt(body[10]);
+        gui.username = body[13];
+        return true;
+        //System.out.println("Response body: " + response.body());
+      } catch (Exception e) {
+        System.out.println("Wasn't able to create the user, the game will then run offline");
+        gui.token = "";
+        gui.user_id = -1;
+      }
+      return false;
 
+  }
+
+  public void storageInfoSetup(){
+    Path userHome = Paths.get(System.getProperty("user.home"));
+    Path gameFolder = userHome.resolve("." + name_game_folder);
+    Path storage_file = gameFolder.resolve("data.txt"); 
+
+    if (Files.exists(storage_file)) { 
+      try {
+        List<String> lines = Files.readAllLines(storage_file);
+        gui.user_id = Integer.parseInt(lines.get(0));
+        gui.token = lines.get(1);
+        gui.username = lines.get(2);
+      } catch (Exception e) {e.printStackTrace();}
+    }else{
+      boolean wasUserAdded = askForNewUser();
+      if (!wasUserAdded)
+        return;
+      List<String> lines = List.of("" + gui.user_id , gui.token, gui.username);
+      try {
+        Files.createDirectories(gameFolder);
+        Files.createFile(storage_file);
+        Files.write(storage_file, lines);
+        System.out.println("Yep, files written successfully");
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Wasn't able to create the user, the game will then run offline");
+      }
+    }
+  }
 
   public GamePanel(){
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -58,6 +120,8 @@ public class GamePanel extends JPanel implements Runnable{
     this.setDoubleBuffered(true);
     this.addKeyListener(keyHandler);
     this.setFocusable(true);
+    this.storageInfoSetup();
+
 
     alienHandler.add();
     gameState = GameState.TitleScreen;
@@ -104,7 +168,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
   }
   public void update(){
-    if (gameState == GameState.TitleScreen || gameState == GameState.OptionsScreen)return;
+    if (gameState == GameState.TitleScreen || gameState == GameState.OptionsScreen || gameState == GameState.RankingScreen )return;
     if (gameState == GameState.PrepareToRun){
       bgTitleScreenSound.stop();
       gameState = GameState.GameScreen;
@@ -136,6 +200,8 @@ public class GamePanel extends JPanel implements Runnable{
           particleSystem.add_boom_particles(playerH, 100f);
           playerH.kill();
           gameState = GameState.DeathScreen;
+          gui.SendDeathData();
+
           //sound.setFile(0);
           sound.play();
 
@@ -160,6 +226,7 @@ public class GamePanel extends JPanel implements Runnable{
         particleSystem.add_boom_particles(playerH, 100f);
         playerH.kill();
         gameState = GameState.DeathScreen;
+        gui.SendDeathData();
         //sound.setFile(0);
         sound.play();
       }
@@ -173,6 +240,8 @@ public class GamePanel extends JPanel implements Runnable{
           particleSystem.add_boom_particles(playerH, 100f);
           playerH.kill();
           gameState = GameState.DeathScreen;
+          gui.SendDeathData();
+
           sound.play();
       }
     }
@@ -192,8 +261,11 @@ public class GamePanel extends JPanel implements Runnable{
       gameState = gui.DrawOptionScreen(g2, gameState, keyHandler);
       this.playerH.speed = gui.options[0];
       this.playerH.angle_speed = gui.options[1];
-      
     }
+
+    if (gameState == GameState.RankingScreen)
+      gameState = gui.DrawRankingsScreen(g2, gameState, keyHandler);
+
     if (gameState == GameState.GameScreen || gameState == GameState.DeathScreen){
       playerH.Draw(g2);
       playerH.DrawBullets(g2);
