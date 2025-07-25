@@ -62,27 +62,26 @@ public class GamePanel extends JPanel implements Runnable{
   AlienHandler alienHandler = new AlienHandler(5);
   
   public boolean askForNewUser(){ 
-      String url = "http://fantasyendpoint.duckdns.org:5000/add_user";
-      HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-      HttpClient client = HttpClient.newBuilder().version(java.net.http.HttpClient.Version.HTTP_1_1).build();
-      try {
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Status: " + response.statusCode());
-        System.out.println("Body: " + response.body());
-        String cleaned = response.body().replaceAll("[:{},]", "");
-        String[] body = cleaned.split("\"");
-        gui.token = body[7];
-        gui.user_id = Integer.parseInt(body[10]);
-        gui.username = body[13];
-        return true;
-        //System.out.println("Response body: " + response.body());
-      } catch (Exception e) {
-        System.out.println("Wasn't able to create the user, the game will then run offline");
-        gui.token = "";
-        gui.user_id = -1;
-      }
-      return false;
-
+    String url = "http://fantasyendpoint.duckdns.org:5000/add_user";
+    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+    HttpClient client = HttpClient.newBuilder().version(java.net.http.HttpClient.Version.HTTP_1_1).build();
+    try {
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      System.out.println("Status: " + response.statusCode());
+      System.out.println("Body: " + response.body());
+      String cleaned = response.body().replaceAll("[:{},]", "");
+      String[] body = cleaned.split("\"");
+      gui.token = body[7];
+      gui.user_id = Integer.parseInt(body[10]);
+      gui.username = body[13];
+      return true;
+      //System.out.println("Response body: " + response.body());
+    } catch (Exception e) {
+      System.out.println("Wasn't able to create the user, the game will then run offline");
+      gui.token = "";
+      gui.user_id = -1;
+    }
+    return false;
   }
 
   public void storageInfoSetup(){

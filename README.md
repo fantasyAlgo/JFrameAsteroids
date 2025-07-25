@@ -31,6 +31,7 @@ java -jar Asteroids.jar
 - Because it is procedurally generated, the asteroids are all different
 - You can play it using the arrow keys to go up, rotating to the left and rotating to the right (you can change this into wasd), you can shoot using the space key (or k)
 - The goal of this game is to have the highest score (the bigger the asteroids is, the higher the reward). Good luck! 
+- In this branch I've added a way to save your score, and a general ranking. (Sorry for it to not be responsive, my raspberry pi is not great)
 
 
 ### TODO:
